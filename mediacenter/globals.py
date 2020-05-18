@@ -25,8 +25,18 @@ CONTROLLER_BUTTONS = [
         'btn_class': 'primary'
     },
     {
-        'title': 'Refresh', 
+        'title': 'Next', 
         'id': 'refresh',
         'btn_class': 'dark'
     },
+    {
+        'title': '<< Skip',
+        'id': 'skip_backward',
+        'btn_class': 'secondary'
+    },
+    {
+        'title': 'Skip >>',
+        'id': 'skip_forward',
+        'btn_class': 'secondary'
+    },    
 ]

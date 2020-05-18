@@ -1,64 +1,45 @@
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-{% load static %}
+{% extends 'mediacenter/base.html' %}
 {% load media_buttons %}
 
-<!DOCTYPE html>
-<html class=''>
-    <head>
-        <meta charset="utf-8">
-        <title>ArcadeArtBox - Controller</title>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="{% static 'tv-icon192.png' %}">
-        <link rel="apple-touch-icon" sizes="57x57" href="{% static 'tv-icon57.png' %}">
-        <link rel="apple-touch-icon" sizes="72x72" href="{% static 'tv-icon72.png' %}">
-        <link rel="apple-touch-icon" sizes="114x114" href="{% static 'tv-icon114.png' %}">
-        <link rel="apple-touch-icon" sizes="144x144" href="{% static 'tv-icon144.png' %}">
-        <link rel="apple-touch-icon" sizes="60×60" href="{% static 'tv-icon60.png' %}">
-        <link rel="apple-touch-icon" sizes="76×76" href="{% static 'tv-icon76.png' %}">
-        <link rel="apple-touch-icon" sizes="120×120" href="{% static 'tv-icon120.png' %}">
-        <link rel="apple-touch-icon" sizes="152×152" href="{% static 'tv-icon152.png' %}">
-        <link rel="apple-touch-icon" sizes="180×180" href="{% static 'tv-icon180.png' %}">
-        <link rel="icon" sizes="192×192" href="{% static 'tv-icon192.png' %}">
-        <link rel="icon" sizes="128×128" href="{% static 'tv-icon128.png' %}">
-    </head>
+{% block title %}ArcadeArtBox - Controller{% endblock %}
+
+{% block content %}
     <body>
         <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <h1 class="display-4">{{room.settings}}</h1>
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="display-4">{{room.settings}}</h1>
+                </div>
+                {% for btn in buttons %}
+                <div class="col-6" style="margin-top:30px">
+                    {% button btn %}
+                </div>
+                {% endfor %}
             </div>
-            {% for btn in buttons %}
-            <div class="col-6" style="margin-top:30px">
-                {% button btn %}
+            <div class="row">
+                <div class="col-12 text-center" style="margin-top: 30px;">
+                    <a class="btn btn-primary" href="{% url 'index' %}">Back To Players</a>
+                </div>
             </div>
-            {% endfor %}
         </div>
-        <div class="row">
-            <div class="col-12 text-center" style="margin-top: 30px;">
-                <a class="btn btn-primary" href="{% url 'index' %}">Back To Players</a>
-            </div>
-        </div>
+        <script>
+            var buttons = document.getElementsByTagName("button");
+            
+            var room = "{{room}}";
+
+            var playerSocket = new WebSocket(
+                'ws://' + window.location.host +
+                '/ws/player/' + '?room=' + room);
+
+            Array.prototype.forEach.call(buttons, function (button) {
+                button.onclick = function () {
+                    var self = this;
+                    playerSocket.send(JSON.stringify({
+                        'action': self.value,
+                        'room_id': room
+                    }))
+                }
+            });
+        </script>
     </body>
-    <script>
-        var buttons = document.getElementsByTagName("button");
-        
-        var room = "{{room}}";
-
-        var playerSocket = new WebSocket(
-            'ws://' + window.location.host +
-            '/ws/player/' + '?room=' + room);
-
-        Array.prototype.forEach.call(buttons, function (button) {
-            button.onclick = function () {
-                var self = this;
-                playerSocket.send(JSON.stringify({
-                    'action': self.value,
-                    'room_id': room
-                }))
-            }
-        });
-    </script>
-</html>
+{% endblock %}

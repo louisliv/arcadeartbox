@@ -1,32 +1,13 @@
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-{% load static %}
+{% extends 'mediacenter/base.html' %}
 
-<!DOCTYPE html>
-<html class=''>
-    <head>
-        <meta charset="utf-8">
-        <title>ArcadeArtBox - Player</title>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="{% static 'tv-icon192.png' %}">
-        <link rel="apple-touch-icon" sizes="57x57" href="{% static 'tv-icon57.png' %}">
-        <link rel="apple-touch-icon" sizes="72x72" href="{% static 'tv-icon72.png' %}">
-        <link rel="apple-touch-icon" sizes="114x114" href="{% static 'tv-icon114.png' %}">
-        <link rel="apple-touch-icon" sizes="144x144" href="{% static 'tv-icon144.png' %}">
-        <link rel="apple-touch-icon" sizes="60×60" href="{% static 'tv-icon60.png' %}">
-        <link rel="apple-touch-icon" sizes="76×76" href="{% static 'tv-icon76.png' %}">
-        <link rel="apple-touch-icon" sizes="120×120" href="{% static 'tv-icon120.png' %}">
-        <link rel="apple-touch-icon" sizes="152×152" href="{% static 'tv-icon152.png' %}">
-        <link rel="apple-touch-icon" sizes="180×180" href="{% static 'tv-icon180.png' %}">
-        <link rel="icon" sizes="192×192" href="{% static 'tv-icon192.png' %}">
-        <link rel="icon" sizes="128×128" href="{% static 'tv-icon128.png' %}">
-    </head>
+{% block title %}ArcadeArtBox - Player{% endblock %}
+
+{% block content %}
     <body style="text-align:center;background:black;">
         <div id="media-container" height="100%"></div>
         <script>
             var increment = .1;
+            var time_increment = 10;
             var set_volume = .5;
             var player_muted = false;
 
@@ -42,27 +23,37 @@
                 if(messageType === 'action') {
                     var action = message['action'];
                     var vid = document.getElementById('video');
-                    switch(action) {
-                        case 'play':
-                            play = vid.play;
-                            play.call(vid);
-                            break;
-                        case 'pause':
-                            pause = vid.pause;
-                            pause.call(vid);
-                            break;
-                        case 'mute':
-                            player_muted = !player_muted
-                            vid.muted = player_muted
-                            break;
-                        case 'vol_up':
-                            vol_up(vid);
-                            break;
-                        case 'vol_down':
-                            vol_down(vid);
-                            break;
-                        default:
-                            break;
+                    try {
+                        switch(action) {
+                            case 'play':
+                                play = vid.play;
+                                play.call(vid);
+                                break;
+                            case 'pause':
+                                pause = vid.pause;
+                                pause.call(vid);
+                                break;
+                            case 'mute':
+                                player_muted = !player_muted
+                                vid.muted = player_muted
+                                break;
+                            case 'vol_up':
+                                vol_up(vid);
+                                break;
+                            case 'vol_down':
+                                vol_down(vid);
+                                break;
+                            case 'skip_forward':
+                                skip_forward(vid);
+                                break;
+                            case 'skip_backward':
+                                skip_backward(vid);
+                                break;
+                            default:
+                                break;
+                        }
+                    } catch {
+                        location.reload()
                     }
                 } else if (messageType==='source') {
                     var source = message['source']
@@ -88,7 +79,7 @@
 
             var create_video_elm = function(source) {
                 var container = document.getElementById('media-container')
-                var template = "<video id=\"video\" src=\"" + source + "\" height=\"100%\"></video>"
+                var template = "<video id=\"video\" controls height=\"100%\"><source src=\"" + source + "\" 'video/mp4; codecs=\"avc1.4D401E, mp4a.40.2\"'/></video>"
                 container.innerHTML = template;
 
                 var vid = document.getElementById('video');
@@ -134,6 +125,28 @@
                 vid.volume = set_volume
             }
 
+            var skip_forward = function (vid) {
+                new_time = vid.currentTime + time_increment;
+
+                if (new_time > vid.duration) {
+                    player.send(JSON.stringify({
+                        'action': 'refresh'
+                    }))
+                } else {
+                    vid.currentTime += new_time
+                }
+            }
+            
+            var skip_backward = function (vid) {
+                new_time = vid.currentTime - time_increment;
+
+                if (new_time < 0) {
+                    vid.currentTime = 0
+                } else {
+                    vid.currentTime = new_time
+                }
+            }
+
         </script>
     </body>
-</html>
+{% endblock %}

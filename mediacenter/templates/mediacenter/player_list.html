@@ -1,28 +1,8 @@
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-{% load static %}
+{% extends 'mediacenter/base.html' %}
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>ArcadeArtBox - Players</title>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="{% static 'tv-icon192.png' %}">
-        <link rel="apple-touch-icon" sizes="57x57" href="{% static 'tv-icon57.png' %}">
-        <link rel="apple-touch-icon" sizes="72x72" href="{% static 'tv-icon72.png' %}">
-        <link rel="apple-touch-icon" sizes="114x114" href="{% static 'tv-icon114.png' %}">
-        <link rel="apple-touch-icon" sizes="144x144" href="{% static 'tv-icon144.png' %}">
-        <link rel="apple-touch-icon" sizes="60×60" href="{% static 'tv-icon60.png' %}">
-        <link rel="apple-touch-icon" sizes="76×76" href="{% static 'tv-icon76.png' %}">
-        <link rel="apple-touch-icon" sizes="120×120" href="{% static 'tv-icon120.png' %}">
-        <link rel="apple-touch-icon" sizes="152×152" href="{% static 'tv-icon152.png' %}">
-        <link rel="apple-touch-icon" sizes="180×180" href="{% static 'tv-icon180.png' %}">
-        <link rel="icon" sizes="192×192" href="{% static 'tv-icon192.png' %}">
-        <link rel="icon" sizes="128×128" href="{% static 'tv-icon128.png' %}">
-    </head>
+{% block title %}ArcadeArtBox - Players{% endblock %}
+
+{% block content %}
     <body>
         <div class="container-fluid">
             <div class="row">
@@ -46,4 +26,4 @@
             </div>
         </div>
     </body>
-</html>
+{% endblock %}
