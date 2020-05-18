@@ -24,9 +24,10 @@ def player(request):
     return render(request, 'mediacenter/player.html', context)
 
 def controller(request, room):
+    room_obj = Room.objects.get(channel_name=room)
     context = {
         'buttons': CONTROLLER_BUTTONS,
-        'room': room
+        'room': room_obj
     }
         
     return render(request, 'mediacenter/controller.html', context)

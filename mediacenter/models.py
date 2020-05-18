@@ -37,7 +37,11 @@ class RoomSetting(models.Model):
         (PHOTO, 'Photo')
     ]
     room = models.OneToOneField(Room, 
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE, related_name="settings")
+    room_name = models.CharField(
+        max_length=144,
+        blank=True
+    )
     player_type = models.CharField(
         max_length=5,
         choices=PLAYER_TYPES,
@@ -55,4 +59,7 @@ class RoomSetting(models.Model):
     )
 
     def __str__(self):
-        return "%s:Settings" % self.room.channel_name
+        if not self.room_name:
+            return self.room.channel_name
+
+        return self.room_name

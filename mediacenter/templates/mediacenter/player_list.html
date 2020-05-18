@@ -24,7 +24,7 @@
                     {% for player in object_list %}
                         <li class="list-group-item">
                             <a href="{% url 'controller' player.channel_name %}">
-                                {{player.channel_name}}
+                                {{player.settings}}
                             </a>
                         </li>
                     {% endfor %}
