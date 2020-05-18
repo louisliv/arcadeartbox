@@ -1,0 +1,33 @@
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html class=''>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12" style="margin-bottom:15px;">
+                    <h1 class="display-4">Players</h1>
+                </div>
+                <div class="col-12">
+                    <ul class="list-group">
+                    {% for player in object_list %}
+                        <li class="list-group-item">
+                            <a href="{% url 'controller' player.channel_name %}">
+                                {{player.channel_name}}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
