@@ -14,17 +14,19 @@
     <body>
         <div class="container-fluid">
         <div class="row">
-            <div class="col-6">
+            <div class="col-12">
                 <h1 class="display-4">{{room}}</h1>
             </div>
-            <div class="col-6">
-                <a class="btn btn-primary float-right" href="{% url 'index' %}">Back To Players</a>
-            </div>
             {% for btn in buttons %}
-                <div class="col-6" style="margin-top:30px">
-                    {% button btn %}
-                </div>
+            <div class="col-6" style="margin-top:30px">
+                {% button btn %}
+            </div>
             {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-12 text-center" style="margin-top: 30px;">
+                <a class="btn btn-primary" href="{% url 'index' %}">Back To Players</a>
+            </div>
         </div>
     </body>
     <script>
