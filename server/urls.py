@@ -22,6 +22,7 @@ import mediacenter.urls as mediacenter_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', mediacenter_urls.Players.as_view(), name="index"),
     url(r'^mediacenter/', include(mediacenter_urls))
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
