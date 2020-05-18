@@ -1,0 +1,12 @@
+[Unit]
+Description=Start daphne server.
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=~/arcadeartbox
+ExecStart=/usr/local/bin/daphne -b 0.0.0.0 -p 80 server.asgi:application
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
