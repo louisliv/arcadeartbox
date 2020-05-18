@@ -4,7 +4,7 @@ from channels_presence.models import Room
 # Create your models here.
 
 class Photo(models.Model):
-    file_path = models.ImageField(upload_to='photos/')
+    file_path = models.FileField(upload_to='photos/')
 
     def get_file_path(self):
         if self.file_path:
