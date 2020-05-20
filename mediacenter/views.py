@@ -5,6 +5,8 @@ from django.db.models import Max
 from mediacenter.globals import CONTROLLER_BUTTONS
 from mediacenter.models import Video
 from channels_presence.models import Room
+from mediacenter.serializers import RoomSerializer
+from rest_framework import viewsets
 
 import random
 
@@ -35,3 +37,8 @@ def controller(request, room):
 class Players(ListView):
     model = Room
     template_name = 'mediacenter/player_list.html'
+
+
+class PlayerViewSet(viewsets.ModelViewSet):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer

@@ -19,11 +19,17 @@ from django.conf.urls import include, url
 from django.conf import settings
 from django.conf.urls.static import static
 import mediacenter.urls as mediacenter_urls
+from mediacenter.views import PlayerViewSet
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'players', PlayerViewSet, 'players')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', mediacenter_urls.Players.as_view(), name="index"),
-    url(r'^mediacenter/', include(mediacenter_urls))
+    url(r'^mediacenter/', include(mediacenter_urls)),
+    url(r'^api/', include(router.urls))
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
