@@ -6,7 +6,7 @@ from mediacenter.models import RoomSetting
 import json
 from urllib.parse import parse_qs
 from django.db.models.aggregates import Count
-from random import randint
+from random import randint, shuffle
 
 
 class PlayerConsumer(AsyncWebsocketConsumer):
@@ -74,11 +74,17 @@ class PlayerConsumer(AsyncWebsocketConsumer):
     def get_source(self):
         self.settings.refresh_from_db()
         if self.settings.player_type == RoomSetting.VIDEO:
-            count = self.settings.videos.aggregate(count=Count('id'))['count']
-            if count:
-                random_index = randint(0, count - 1)
-                video = self.settings.videos.all()[random_index]
-                return (video.get_file_path(), 'video')
+            # count = self.settings.videos.aggregate(count=Count('id'))['count']
+            # if count:
+            #     random_index = randint(0, count - 1)
+            #     video = self.settings.videos.all()[random_index]
+            #     return (video.get_file_path(), 'video')
+            videos = list(self.settings.videos.all())
+            file_paths = []
+            for video in videos:
+                file_paths.append(video.get_file_path())
+            shuffle(file_paths)
+            return(json.dumps(file_paths), 'video')
         else:
             count = self.settings.photos.aggregate(count=Count('id'))['count']
             if count:
@@ -121,20 +127,10 @@ class PlayerConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         action = text_data_json.get('action', None)
 
-        if action not in ['refresh']:
-            message = {
-                'type': 'button_action',
-                'action': action
-            }
-        else:
-            source, source_type = await database_sync_to_async(self.get_source)()
-
-            message = {
-                'type': 'send_source',
-                'message': source,
-                'state': 'source',
-                'player_type': source_type
-            }
+        message = {
+            'type': 'button_action',
+            'action': action
+        }
         
         # Send message to room group
         await self.channel_layer.group_send(
